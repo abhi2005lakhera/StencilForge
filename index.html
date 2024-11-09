@@ -76,6 +76,7 @@
         <p id="responseMessage"></p>
     </div>
 
+    <div><img id="displayImage" alt="Fetched image" style="display: none;width: 25%;height: auto;margin-right: auto;margin-left: auto;"></div>
     <hr>
 
     <div class="team-section">
@@ -119,6 +120,9 @@
         const uploadButton = document.getElementById('uploadButton');
         const responseMessage = document.getElementById('responseMessage');
 
+        const baseurl = 'https://stencilforgeapi-hydydphyg2cggvef.centralindia-01.azurewebsites.net';
+        // const baseurl = 'http://127.0.0.1:8000'
+
         // Upload button click event
         uploadButton.onclick = async function (event) {
             event.preventDefault(); // Prevent form submission
@@ -128,12 +132,15 @@
             }
             let formData = new FormData();
             formData.append("file", fileInput.files[0]); // Add file to FormData
-            let response = await fetch("/upload", {
+            let response = await fetch(`${baseurl}/upload`, {
                 method: "POST",
                 body: formData // Send FormData containing the file
             });
             let result = await response.json(); // Parse JSON response
+            const imageData = `data:image/jpeg;base64,${result.image}`;
             responseMessage.innerText = result.message; // Display response message
+            document.getElementById('displayImage').style.display = 'block';
+            document.getElementById('displayImage').src = imageData;
         };
     </script>
 </body>
